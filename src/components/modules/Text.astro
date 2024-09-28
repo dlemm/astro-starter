@@ -1,0 +1,15 @@
+---
+import { marked } from 'marked';
+
+export interface TextModuleProps {
+  content: { title: string; body: string };  // Frontmatter + Body-Inhalt der Markdown-Datei
+}
+
+const { content } = Astro.props;
+const text = marked(content.body);
+---
+
+<section class="text-module">
+  <div set:html={text}>
+  </div>
+</section>

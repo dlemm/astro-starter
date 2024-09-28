@@ -1,0 +1,38 @@
+---
+import { getCollection, getEntryBySlug } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import HeroModule from '../components/modules/Hero.astro';
+import TextModule from '../components/modules/Text.astro';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  const texts = await getCollection('text');
+  return pages.map((page) => ({
+    params: { 
+      slug: page.slug
+    }, 
+    props: {
+      page,
+    }
+  }));
+}
+
+const {page} = Astro.props;
+const {hero, text} = page.data;
+let textContent = null;
+if (text && text.reference) {
+  const textEntry = await getEntryBySlug('text', text.reference.replace('text/', ''));  // Text aus der Datei holen
+  console.log('Text Entry:', textEntry);
+  textContent = textEntry ? textEntry : null;  // Falls die Datei existiert, lade den Inhalt
+}
+
+---
+
+<Layout title={page.data.title}>
+
+  <main>
+    {hero && <HeroModule {...hero} />}
+    {textContent && <TextModule content={textContent} />}
+    {!textContent && <p>Textinhalt nicht gefunden</p>}
+    </main>
+</Layout>

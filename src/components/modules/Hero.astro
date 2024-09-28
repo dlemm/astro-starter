@@ -1,0 +1,19 @@
+---
+export interface HeroModuleProps {
+  title: string;
+  subtitle?: string;
+  image: string;
+  buttonText?: string;
+  buttonLink?: string;
+}
+
+const { title, subtitle, image, buttonText, buttonLink } = Astro.props;
+---
+
+<section class="hero" style={`background-image: url(${image})`}>
+  <div class="content">
+    <h1>{title}</h1>
+    {subtitle && <p>{subtitle}</p>}
+    {buttonText && buttonLink && <a href={buttonLink} class="btn">{buttonText}</a>}
+  </div>
+</section>
